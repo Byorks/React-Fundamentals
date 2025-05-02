@@ -1,7 +1,11 @@
-// Esse método de importaçao de imagem funciona por conta do processo de compilação
-// que faz também o JSX funcionar.
+/*
+Esse método de importaçao de imagem funciona por conta do processo de compilação
+que faz também o JSX funcionar.
+*/
 import reactImg from './assets/react-core-concepts.png';
-import componentsImg from './assets/components.png'
+
+// Colocamos entre chaves quando um export tem nome
+import { CORE_CONCEPTS } from './data.js';
 
 const reactDescriptions = ['Fundamental', 'Crucial', 'Core'];
 
@@ -9,11 +13,15 @@ function genRandomInt(max) {
   return Math.floor(Math.random() * (max + 1));
 }
 
-// ******** Criando componente personalizado ********
-// O nome deve ser padrão Pascal Case
-// A função deve retornar sempre algo
-// A princípio escreveremos tudo no APP, mas futuramente será tudo separado cada um com sua função
-function Header() {
+
+/* 
+******** Criando componente personalizado ********
+O nome deve ser padrão Pascal Case
+A função deve retornar sempre algo
+A princípio escreveremos tudo no APP, mas futuramente será tudo separado cada um com sua função
+
+*/
+function Header(){
   const description = reactDescriptions[genRandomInt(2)];
 
   return (
@@ -26,22 +34,30 @@ function Header() {
         </p>
       </header>
   );
-}
 
-function CoreConcept(props) {
+}
+ 
+/* 
+Através da Desestruturaçao de Objeto do Javascript conseguimos acessar as propriedades de forma direta
+Mas os nomes precisam ser identicos aos do objeto
+Assim o uso de prop. é desnecessário
+*/ 
+function CoreConcept({image, title, description}) {
   return (
     <li>
-      <img src={props.img} alt="..." />
-      <h3>{props.title}</h3>
-      <p>{props.description}</p>
+      <img src={image} alt="..." />
+      <h3>{title}</h3>
+      <p>{description}</p>
     </li>
   );
 }
 
-// Normalmente executariamos a função aqui, em React não é o caso
-// Para executar vamos colocar como uma tag HTML
-// Podemos escrever da maneira comum abre e fecha tag ou abreviar => <Header></Header>
-// Para escrever de forma abreviada não podemos esquecer a /
+/*
+Normalmente executariamos a função aqui, em React não é o caso
+Para executar vamos colocar como uma tag HTML
+Podemos escrever da maneira comum abre e fecha tag ou abreviar => <Header></Header>
+Para escrever de forma abreviada não podemos esquecer a /
+*/
 function App() {
   return (
     <div>
@@ -50,13 +66,13 @@ function App() {
         <section id="core-concepts">
          <h2>Core Concepts</h2>
           <ul>
-            <CoreConcept 
-              title="Componets" 
-              description="The core UI building block."
-              img={componentsImg}
-            />
-            <CoreConcept title="Props" />
-            <CoreConcept />
+            <CoreConcept {...CORE_CONCEPTS[0]} />
+            <CoreConcept {...CORE_CONCEPTS[1]} />
+            <CoreConcept {...CORE_CONCEPTS[2]} />
+            <CoreConcept
+             title={CORE_CONCEPTS[3].title}
+             description={CORE_CONCEPTS[3].description}
+             image={CORE_CONCEPTS[3].image} />
           </ul>
         </section>
       </main>
