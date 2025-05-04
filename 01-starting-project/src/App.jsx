@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 // Colocamos entre chaves quando um export tem nome
 import { CORE_CONCEPTS } from './data.js';
+import { EXAMPLES } from './data.js';
 import Header from './components/Header/Header.jsx';
 import CoreConcept from './components/CoreConcept/CoreConcept.jsx';
 import TabButton from './components/TabButton.jsx';
@@ -19,18 +20,67 @@ function App() {
   // O primeiro item da lista será um "foto" do primeiro estado ou padrão -> Please click a button
   // O segundo item será uma função que atualizara o App, renderizando as atualições feitas
   // também armazenará o novo valor, para qunado o useState foi chamado
-  const [ selectedTopic, setSelectedTopic ] = useState('Please click a button'); // Precisa ser chamado no topo da função do componente
-
+  const [ selectedTopic, setSelectedTopic ] = useState(); // Precisa ser chamado no topo da função do componente
+  // Minha maneira
+  // const [ topicTitle, setSelectedTopicTitle ] = useState(EXAMPLES.components.title);
+  // const [ topicDescription, setSelectedTopicDesc ] = useState(EXAMPLES.components.description);
+  // const [ topicCode, setSelectedTopicCode ] = useState(EXAMPLES.components.code);
 
   // Quando uma função é de eventos, nomes com handle são utilizados
-    // é uma convenção
+  // é uma convenção
   function handleSelect(selectedButton) {
     // selectedButton => 'componentes', 'jsx', 'props', 'state'
     setSelectedTopic(selectedButton);
+
+    // O log abaixo será do valor desatualizado, isso acontece porque o
+    // React agenda a atualização da interface, logo a  variável continua com
+    // o valor antigo, se quissesemos fazer algum tratamento com o novo valor,
+    // precisariamos utilizar o valor de selectedButton
+    console.log(selectedTopic);
+
+    // Minha maneira de exibir os dados em tela de acordo com o click
+    // A meneira dele evitou esse monte de Ifs D:
+    /*
+    if(selectedButton == 'components') {
+      setSelectedTopicTitle(EXAMPLES.components.title);
+      setSelectedTopicDesc(EXAMPLES.components.description);
+      setSelectedTopicCode(EXAMPLES.components.code);
+    }else if (selectedButton == 'jsx') {
+      setSelectedTopicTitle(EXAMPLES.jsx.title);
+      setSelectedTopicDesc(EXAMPLES.jsx.description);
+      setSelectedTopicCode(EXAMPLES.jsx.code);
+    } else if (selectedButton == 'props') {
+      setSelectedTopicTitle(EXAMPLES.props.title);
+      setSelectedTopicDesc(EXAMPLES.props.description);
+      setSelectedTopicCode(EXAMPLES.props.code);
+    } else {
+      setSelectedTopicTitle(EXAMPLES.state.title);
+      setSelectedTopicDesc(EXAMPLES.state.description);
+      setSelectedTopicCode(EXAMPLES.state.code);
+    }
+    */
+    
   }
 
   // Para ver quantas vezes o React renderiza um componente
   console.log('APP COMPONENT EXECUTING'); 
+
+  // Colocando variável que irá configurar o componente antes dele ser colocado em tela
+  let tabContent = <p>Please select a topic.</p>
+
+  if (selectedTopic) {
+    tabContent = (
+      <div id="tab-content">
+        <h3>{EXAMPLES[selectedTopic].title}</h3>
+        <p>{EXAMPLES[selectedTopic].description}</p>
+        <pre>
+          <code code>
+            {EXAMPLES[selectedTopic].code}
+          </code>
+        </pre>
+      </div>
+    );
+  }
   
   return (
     <div>
@@ -39,13 +89,7 @@ function App() {
         <section id="core-concepts">
          <h2>Core Concepts</h2>
           <ul>
-            <CoreConcept {...CORE_CONCEPTS[0]} />
-            <CoreConcept {...CORE_CONCEPTS[1]} />
-            <CoreConcept {...CORE_CONCEPTS[2]} />
-            <CoreConcept
-             title={CORE_CONCEPTS[3].title}
-             description={CORE_CONCEPTS[3].description}
-             image={CORE_CONCEPTS[3].image} />
+            {CORE_CONCEPTS.map((conceptItem) => <CoreConcept key={conceptItem.title} {...conceptItem} />)}
           </ul>
         </section>
         <section id='examples'>
@@ -54,12 +98,42 @@ function App() {
             {/* Precisamos de uma função anonima para passar os parâmetros de forma que ele não 
             execute o handleSelect assim que o componente for renderizado, ele vai executar a 
             função anônima */}
-            <TabButton onSelect={()=> handleSelect('components')}>Components</TabButton>
-            <TabButton onSelect={()=> handleSelect('jsx')}>JSX</TabButton>
-            <TabButton onSelect={()=> handleSelect('props')}>Props</TabButton>
-            <TabButton onSelect={()=> handleSelect('state')}>State</TabButton>
+            <TabButton 
+            isSelected={selectedTopic === 'components'}
+            onSelect={()=> handleSelect('components')}
+            >
+              Components
+            </TabButton>
+            <TabButton 
+            isSelected={selectedTopic === 'jsx'} 
+            onSelect={()=> handleSelect('jsx')}
+            >
+              JSX
+            </TabButton>
+            <TabButton
+            isSelected={selectedTopic === 'props'} 
+            onSelect={()=> handleSelect('props')}
+            >
+              Props
+            </TabButton>
+            <TabButton 
+            isSelected={selectedTopic === 'state'} 
+            onSelect={()=> handleSelect('state')}
+            >
+              State
+            </TabButton>
           </menu>
-          {selectedTopic}
+          {tabContent}
+             
+            {/* Minhas maneira
+             <h3>{topicTitle}</h3>
+            <p>{topicDescription}</p>
+            <pre>
+              <code>
+                {topicCode}
+              </code>
+            </pre> */}
+          
         </section>
       </main>
     </div>
