@@ -1,36 +1,5 @@
 import { useState } from 'react';
 
-import { styled } from 'styled-components'
-
-// Utilizando Tagged templates 
-const ControlContainer =  styled.div`
-.controls {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-`
-const Label = styled.label `
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #6b7280;`
-
-const Input = styled.input `
-  width: 100%;
-  padding: 0.75rem 1rem;
-  line-height: 1.5;
-  background-color: #d1d5db;
-  color: #374151;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-`
-
 export default function AuthInputs() {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
@@ -53,10 +22,10 @@ export default function AuthInputs() {
 
   return (
     <div id="auth-inputs">
-      <ControlContainer>
+      <div className="controls">
         <p>
-          <Label className={`label ${emailNotValid ? 'invalid' : undefined}`}>Email</Label>
-          <Input
+          <label className={`label ${emailNotValid ? 'invalid' : undefined}`}>Email</label>
+          <input
             type="email"
             // style={{
             //   backgroundColor: emailNotValid ? '#fed2d2' : '#d1d5db'
@@ -66,17 +35,17 @@ export default function AuthInputs() {
           />
         </p>
         <p>
-          <Label className={`label ${passwordNotValid ? 'invalid' : undefined}`}>Password</Label>
-          <Input
+          <label>Password</label>
+          <input
             type="password"
-            className={passwordNotValid ? 'invalid' : undefined}
+            // className={passwordNotValid ? 'invalid' : undefined}
             onChange={(event) =>
               handleInputChange('password', event.target.value)
             }
           />
         </p>
         {/* mkm,8c9cv */}
-        </ControlContainer>
+      </div>
       <div className="actions">
         <button type="button" className="text-button">
           Create a new account
