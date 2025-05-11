@@ -9,6 +9,7 @@ import HomePage from './pages/Home';
 import ProductsPage from './pages/Products';
 import RootLayout from './pages/Root';
 import ErrorPage from './pages/Error';
+import ProductDetailPage  from './pages/ProductDetail.js';
 
 // No modo antigo definia-se as rotas atravez dos componentes, como a seguir
 // const routeDefinitions = createRoutesFromElements (
@@ -31,9 +32,15 @@ const router = createBrowserRouter([
     // configurando página de erro caso a / não funcione
     errorElement: <ErrorPage />,
     children : [
+
       // Cada objeto representa uma rota
-      {path: '/', element: <HomePage />},
-      {path: '/products', element: <ProductsPage />, }
+      // { path: '', element: <HomePage /> },
+
+      // Forma alternativa de colocar a página padrão Index Roots
+      { index: true, element: <HomePage /> },
+      { path: 'products', element: <ProductsPage />, },
+      // Criando caminho dinâmico
+      { path: 'products/:productId', element: <ProductDetailPage/> }
     ]
   },
   { // Dessa forma conseguimos criar vários caminhos independentes
